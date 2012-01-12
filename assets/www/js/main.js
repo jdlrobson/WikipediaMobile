@@ -40,6 +40,8 @@ function onDeviceReady() {
             return false;
         });
 
+        $(".closeButton").bind("click", hideOverlays);
+
         app.initLinkHandlers();
         loadContent();
         setActiveState();
