@@ -22,11 +22,15 @@
 	<false/>
 	<key>ExternalHosts</key>
 	<array>
+		<string>ws.geonames.net</string>
+		<string>*.tile.openstreetmap.org</string>
 		<string>*.wikipedia.org</string>
 		<string>*.wikimedia.org</string>
 	</array>
 	<key>Plugins</key>
 	<dict>
+		<key>ActionSheet</key>
+		<string>ActionSheet</string>
 		<key>com.phonegap.accelerometer</key>
 		<string>PGAccelerometer</string>
 		<key>com.phonegap.camera</key>

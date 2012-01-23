@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html class="goodscroll">
 
 <head>
 	<meta name="viewport" content="width=100%; user-scalable=no" />
@@ -11,8 +11,11 @@
 	<script type="text/javascript" charset="utf-8" src="js/lawnchair/adapters/webkit-sqlite.js"></script>
 
 	<script type="text/javascript" charset="utf-8" src="js/zepto.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="js/hogan.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="js/mediawiki.js"></script>
 	<script type="text/javascript" charset="utf-8" src="js/jquery.localize.js"></script>
+
+	<script type="text/javascript" charset="utf-8" src="leaflet/leaflet.js"></script>
 
 	<script type="text/javascript" charset="utf-8" src="js/propertiesFileReader.js"></script>
 	<script type="text/javascript" charset="utf-8" src="js/preferences.js"></script>
@@ -20,9 +23,11 @@
 
 	<!-- app logic -->
 	<script type="text/javascript" charset="utf-8" src="js/network.js"></script>
-	<script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+	<script type="text/javascript" charset="utf-8" src="js/templates.js"></script>
 	<script type="text/javascript" charset="utf-8" src="js/main.js"></script>
 	<script type="text/javascript" charset="utf-8" src="js/savedpages.js"></script>
+	<script type="text/javascript" charset="utf-8" src="js/chrome.js"></script>
+	<script type="text/javascript" charset="utf-8" src="js/app.js"></script>
 	<script type="text/javascript" charset="utf-8" src="js/app_history.js"></script>
 	<script type="text/javascript" charset="utf-8" src="js/search.js"></script>
 	<script type="text/javascript" charset="utf-8" src="js/geo.js"></script>
@@ -33,19 +38,106 @@
 	<!-- platform-specific setup and overrides -->
 	<script type="text/javascript" charset="utf-8" src="js/platform-stub.js"></script>
 
+	<link rel="stylesheet" href="leaflet/leaflet.css" />  
+
 	<link rel="stylesheet" href="app.css" />  
 	<link rel="stylesheet" href="wiki.css" />
 
 </head>
 
 <body onload="init();">
- 
+
+	<div id="templates">
+		<script type="text/html" id="settings-page-template">
+			<div class="item">
+				<label><msg key="settings-language-label"></msg></label>
+				<p id="selectedLanguage"></p>
+				<select id='contentLanguageSelector'>
+					{{#languages}}
+					<option value="{{code}}">{{name}}</option>
+					{{/languages}}
+				</select>
+			</div>
+
+			<div class="item">
+				<label><msg key="settings-font-size-label"></msg></label>
+				<p><msg key="settings-font-size-desc"></msg></p>
+				<select id="fontSizeSelector">
+					{{#fontSizes}}
+					<option value="{{value}}">{{name}}</option>
+					{{/fontSizes}}
+				</select>
+			</div>
+		</script>
+		<script type="text/html" id="saved-pages-template">
+			{{#pages}}
+				<div class="listItemContainer" data-page-url="{{key}}" data-page-title="{{title}}">
+					<a class="listItem savedPage">
+						<span class="iconSavedPage"></span>
+						<span class="text deleteEnabled">{{title}}</span>
+					</a>
+					<a class="deleteSavedPage deleteButton"></a>
+				</div>
+			{{/pages}}
+			{{^pages}}
+				<div class="lisItemContainer"></div>
+			{{/pages}}
+		</script>
+
+		<script type="text/html" id="search-results-template">
+			{{#pages}}
+				<div class="listItemContainer" data-page-url="{{key}}" data-page-title="{{title}}">
+					<a class="listItem searchItem">
+						<span class="iconSearchResult"></span>
+						<span class="text deleteEnabled">{{title}}</span>
+					</a>
+				</div>
+			{{/pages}}
+			{{^pages}}
+				<div class="listItemContainer">
+					<a class="listItem searchItem">
+						<span class="iconSearchResult"></span>
+						<span class="text deleteEnabled">No results found</span>
+					</a>
+				</div>
+			{{/pages}}
+			<div class="listItemContainer closeSearch">
+				<div class="listItem">Close</div>
+			</div>
+		</script>
+
+		<script type="text/html" id="history-template">
+			{{#pages}}
+				<div class="listItemContainer" data-page-url="{{value}}" data-page-title="{{title}}">
+					<a class="listItem historyItem">
+						<span class="iconHistory"></span>
+						<span class="text">{{title}}</span>
+					</a>
+				</div>
+			{{/pages}}
+			{{^pages}}
+				<div class="listItemContainer"></div>
+			{{/pages}}
+		</script>
+
+		<script type="text/html" id="language-links-template">
+			{{#languages}}
+			<div class="listItemContainer" data-page-url="{{url}}">
+				<a class="listItem languageLink" >
+					<span class="text">{{name}}</span>
+				</a>
+			</div>
+			{{/languages}}
+		</script>
+
+	</div>
+
 	<header id="mainHeader">
 		<div class="titlebar" id="titlebar">
 			<div id="searchFormHolder">
 			<div class="titlebarIcon"></div>
 			<form id="searchForm">
-				<input type="text" id="searchParam" onkeypress="setTimeout('javascript:startSearch()', 5);"></input>
+				<input type="text" id="searchParam"></input>
 				<input type="submit" id="search" value=""></input>
 			</form>
 			<div id="clearSearch"></div>
@@ -55,11 +147,19 @@
 	</header>
 
 	<div id="about-page-overlay">
-		<img src="image/logo.png" />
-		<p id="about-version"><msg key="about-version"></msg> 1.0</p>
-		<a id="about-wmf-logo" href="http://wikimediafoundation.org/"><img src="image/wmf.png" /></a>
-		<p id="about-copyright"><msg key="about-copyright"></msg></p>
-		<p id="about-license"><msg key="about-license"></msg></p>
+		<header>
+			<div class="titlebar">
+				<div class="titlebarItem"><msg key="about-page-title">About</msg></div>
+				<div class="titlebarItem closeButton"></div>
+			</div>
+		</header>
+		<div id="about-page-content">
+			<img src="image/logo.png" />
+			<p id="about-version"><msg key="about-version"></msg> 1.0</p>
+			<a id="about-wmf-logo" href="http://wikimediafoundation.org/"><img src="image/wmf.png" /></a>
+			<p id="about-copyright"><msg key="about-copyright"></msg></p>
+			<p id="about-license"><msg key="about-license"></msg></p>
+		</div>
 	</div>
 
 	<div id="savedPages">
@@ -69,7 +169,7 @@
 				<div class="titlebarItem closeButton"></div>
 			</div>
 		</header>
-		<div id="savedPagesList"></div>
+		<div id="savedPagesList" class="scroller"></div>
 	</div>
 		
 	<div id="history">
@@ -79,14 +179,11 @@
 				<div class="titlebarItem closeButton"></div>
 			</div>
 		</header>
-		<div id="historyList"></div>
-		<!--
-		<div onclick="javascript:purgeHistory();">purge</div>
-		-->
+		<div id="historyList" class="scroller"></div>
 	</div>
 
 	<div id="searchresults">
-		<div id="resultList"></div>
+		<div id="resultList" class="scroller"></div>
 	</div>
 
 	<div id="settings">
@@ -97,7 +194,7 @@
 				<div class="titlebarItem closeButton"></div>
 			</div>
 		</div>  
-		<div id="settingsList">
+		<div id="settingsList" class="scroller">
 		</div>
 	</div>
 
@@ -108,24 +205,34 @@
 				<div class="titlebarItem closeButton"></div>
 			</div>
 		</header>
-		<div id="langList"></div>
+		<div id="langList" class="scroller"></div>
 	</div>
 
-	<div id="content">
+	<div id="content" class="scroller">
 		<div id="main"></div>
 	</div>  
+	
+	<div id="nearby-overlay">
+		<header>
+			<div class="titlebar">
+				<div class="titlebarItem"><msg key="nearby-title">Nearby</msg></div>
+				<div class="titlebarItem closeButton"></div>
+			</div>
+		</header>
+		<div id="map"></div>
+	</div>
 
 	<menu id="appMenu" type="context">
-		<command type="command" id="languageCmd" icon="optionLanguage.png" disabled="false" action="selectLanguage();" />
-		<command type="command" id="nearbyCmd" icon="optionNearMe.png" disabled="false" action="getCurrentPosition();" />
-		<command type="command" id="historyCmd" icon="optionViewHistory.png" disabled="false" action="getHistory();" />
-		<command type="command" id="savePageCmd" icon="optionAddBookmark.png" disabled="false" action="savePage();" />
-		<command type="command" id="savedPagesCmd" icon="optionReadLater.png" disabled="false" action="showSavedPages();" />
-		<command type="command" id="sharePageCmd" disabled="false" action="sharePage();" />
-		<command type="command" id="forwardCmd" icon="optionForward.png" disabled="true" action="goForward();" />
-		<command type="command" id="selectTextCmd" disabled="false" action="selectText();" />
-		<command type="command" id="settingsCmd" icon="optionSettings.png" disabled="false" action="getSettings();" />
-		<command type="command" id="aboutCmd" disabled="false" action="aboutPage();" />
+		<command type="command" id="languageCmd" icon="optionLanguage.png" disabled="false" action="read-in" />
+		<command type="command" id="nearbyCmd" icon="optionNearMe.png" disabled="false" action="near-me" />
+		<command type="command" id="historyCmd" icon="optionViewHistory.png" disabled="false" action="view-history" />
+		<command type="command" id="savePageCmd" icon="optionAddBookmark.png" disabled="false" action="save-page" />
+		<command type="command" id="savedPagesCmd" icon="optionReadLater.png" disabled="false" action="view-saved-pages" />
+		<command type="command" id="sharePageCmd" disabled="false" action="share-page" />
+		<command type="command" id="forwardCmd" icon="optionForward.png" disabled="true" action="go-forward" />
+		<command type="command" id="selectTextCmd" disabled="false" action="select-text" />
+		<command type="command" id="settingsCmd" icon="optionSettings.png" disabled="false" action="view-settings" />
+		<command type="command" id="aboutCmd" disabled="false" action="view-about" />
 	</menu>
 
 </body>

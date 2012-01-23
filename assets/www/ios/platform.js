@@ -4,27 +4,60 @@ function updateMenuState() {
 	var items = [
 		{
 			id: 'menu-back',
-			action: goBack
+			action: chrome.goBack
+		},
+		{
+			id: 'menu-forward',
+			action: chrome.goForward
 		},
 		{
 			id: 'menu-language',
-			action: selectLanguage
+			action:  languageLinks.showAvailableLanguages
 		},
 		{
-			id: 'menu-history',
-			action: getHistory
+			id: 'menu-output',
+			action: function() {
+				popupMenu([
+					mw.msg('menu-savePage'),
+					mw.msg('menu-sharePage'),
+					mw.msg('menu-cancel')
+				], function(value, index) {
+					if (index == 0) {
+						savedPages.saveCurrentPage();
+					} else if (index == 1) {
+						sharePage();
+					}
+				}, {
+					cancelButtonIndex: 2,
+					origin: this
+				});
+			}
 		},
 		{
-			id: 'menu-savePage',
-			action: savePage
-		},
-		{
-			id: 'menu-savedPages',
-			action: showSavedPages
+			id: 'menu-sources',
+			action: function() {
+				popupMenu([
+					mw.msg('menu-nearby'),
+					mw.msg('menu-savedPages'),
+					mw.msg('menu-history'),
+					mw.msg('menu-cancel')
+				], function(val, index) {
+					if (index == 0) {
+						getCurrentPosition();
+					} else if (index == 1) {
+						savedPages.showSavedPages();
+					} else if (index == 2) {
+						appHistory.showHistory();
+					}
+				}, {
+					cancelButtonIndex: 3,
+					origin: this
+				});
+			}
 		},
 		{
 			id: 'menu-settings',
-			action: getSettings
+			action: appSettings.showSettings
 		}
 	];
 	$('#menu').remove();
@@ -38,9 +71,22 @@ function updateMenuState() {
 		$button
 			.attr('id', item.id)
 			.click(function() {
-				item.action();
+				item.action.apply(this);
 			})
 			.append('<span>')
 			.appendTo($menu);
 	});
 };
+
+// @Override
+function popupMenu(items, callback, options) {
+	if (options.origin) {
+		var $origin = $(options.origin),
+			pos = $origin.offset();
+		options.left = pos.left;
+		options.top = 0; // hack pos.top;
+		options.width = $origin.width();
+		options.height = $origin.height();
+	}
+	window.plugins.actionSheet.create('', items, callback, options);
+}
