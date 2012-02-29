@@ -31,3 +31,30 @@ test('disableImages off and on', function() {
 	strictEqual(imgsStart, 2, '2 images existed before');
 	strictEqual(imgsEnd, 2, 'images in are visible again');
 });
+
+module('app.js - 2', {
+	setup: function() {
+		app.baseURL = '';
+		$('<div id="content" style="display:none"><div id="main"></div></div>').appendTo(document.body);
+	},
+	teardown: function() {
+		$('#content').remove();
+	}
+});
+
+test('loadPageFromTitle', function() {
+	var expectedUrl = '/w/api.php?action=parse&format=json&page=Hello&mobileformat=html';
+	window.network.setCallback(function(options) {
+		if( options.url === expectedUrl && options.dataType === 'json' ) {
+			var html = '<div id="content">Sample text<div class="floatleft"><a href="/w/index.php/Hello" class="image">link</a></div>';
+			options.success({
+				'parse':{'title':'Hello','revid':196,'text': html }
+			});
+		}
+	});
+	app.loadPageFromTitle( 'Hello' );
+	strictEqual( $('#main h1.firstHeading#firstHeading').text(), 'Hello', 'A heading was added' );
+	strictEqual( $('#main a').length, 1, '1 link added to #content div' );
+	strictEqual( $('#main a').text(), 'link', 'check link was copied across' );
+	strictEqual( $('#content:visible').length, 1, 'the content is visible');
+});

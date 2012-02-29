@@ -28,6 +28,17 @@ window.app = function() {
 		return d;
 	}
 
+	function loadPageFromTitle(title) {
+		network.makeRequest({
+			url: app.baseURL + '/w/api.php?action=parse&format=json&page=' + encodeURIComponent(title) + '&mobileformat=html',
+			dataType: 'json',
+			success: function(json) {
+				chrome.renderFromApi( json, app.baseURL + '/wiki/' + encodeURIComponent(title) );
+				chrome.showContent();
+			}
+		});
+	}
+
 	function loadPage(url, origUrl) {
 		var d = $.Deferred();
 		origUrl = origUrl || url;
@@ -160,6 +171,7 @@ window.app = function() {
 		baseUrlForLanguage: baseUrlForLanguage,
 		setCaching: setCaching,
 		loadPage: loadPage,
+		loadPageFromTitle: loadPageFromTitle,
 		loadCachedPage: loadCachedPage
 	};
 

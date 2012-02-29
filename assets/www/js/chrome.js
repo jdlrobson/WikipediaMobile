@@ -58,6 +58,17 @@ window.chrome = function() {
 		chrome.doScrollHack('#content');
 	}
 
+	function renderFromApi(data, url) {
+		$('base').attr('href', url);
+
+		$('#main').html($(data.parse.text).html());
+		$('<h1 id="firstHeading" class="firstHeading">').text(data.parse.title).
+			prependTo('#main');
+
+		showContent();
+		doScrollHack('#content');
+	}
+
 	function showNotification(text) {
 		alert(text);
 	}
@@ -326,6 +337,7 @@ window.chrome = function() {
 
 	return {
 		initialize: initialize,
+		renderFromApi: renderFromApi,
 		renderHtml: renderHtml,
 		loadFirstPage: loadFirstPage,
 		showSpinner: showSpinner,

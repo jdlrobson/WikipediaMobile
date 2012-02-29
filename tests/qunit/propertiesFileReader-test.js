@@ -1,3 +1,5 @@
+module('propertiesFileReader');
+
 test('Is module obj defined?', function() {
 	expect(1);
 	ok(typeof propertiesFileReader === "object");
