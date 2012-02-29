@@ -74,8 +74,7 @@ window.appSettings = function() {
 	}
 
 	function onDisableImages() {
-		var disabled = $(this).val();
-		app.disableImages(true);
+		app.disableImages($(this).is(':checked'));
 	}
 
 	function onContentLanguageChanged() {
