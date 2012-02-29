@@ -96,6 +96,12 @@ window.app = function() {
 	}
 
 	function disableImages(disabled) {
+		preferencesDB.set('disabledImages', disabled);
+		if(disabled) {
+			$('#content img').hide();
+		} else {
+			$('#content img').show();
+		}
 	}
 	
 	
