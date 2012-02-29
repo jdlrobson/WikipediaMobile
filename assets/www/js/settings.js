@@ -45,7 +45,7 @@ window.appSettings = function() {
 	}
 
 	function renderSettings() {
-		var template = templates.getTemplate('settings-page-template');
+		var template = templates.getTemplate('settings-page-template'), checked;
 		$("#settingsList").html(template.render({languages: locales, fontSizes: fontSizes, aboutPage: aboutPage}));
 
 		var currentContentLanguage = preferencesDB.get("language");		
@@ -59,6 +59,9 @@ window.appSettings = function() {
 			}
 		});
 		$("#selectedLanguage").html(currentContentLanguage);	
+		checked = preferencesDB.get('disabledImages');
+		$('#disableImagesCheckbox').attr('checked', checked === 'true' ? true : false).
+			change(onDisableImages);
 		$("#fontSizeSelector").val(preferencesDB.get("fontSize")).change(onFontSizeChanged);
         $("#aboutPageLabel").click(function () { 
                                    aboutPage();
@@ -68,6 +71,11 @@ window.appSettings = function() {
 		chrome.hideContent();
 		$('#settings').localize().show();
 		chrome.doFocusHack();                                   
+	}
+
+	function onDisableImages() {
+		var disabled = $(this).val();
+		app.disableImages(true);
 	}
 
 	function onContentLanguageChanged() {

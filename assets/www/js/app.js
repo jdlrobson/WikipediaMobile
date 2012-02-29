@@ -94,6 +94,9 @@ window.app = function() {
 		preferencesDB.set('fontSize', size);
 		$('#main').css('font-size', size);
 	}
+
+	function disableImages(disabled) {
+	}
 	
 	
 	function setCaching(enabled, success) {
@@ -141,6 +144,7 @@ window.app = function() {
 	}
 
 	var exports = {
+		disableImages: disableImages,
 		setFontSize: setFontSize,
 		setContentLanguage: setContentLanguage,
 		navigateToPage: navigateToPage,
