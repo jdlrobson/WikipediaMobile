@@ -117,8 +117,7 @@ window.search = function() {
 
 	function onSearchResultClicked() {
 		var parent = $(this).parents(".listItemContainer");
-		var url = parent.attr("data-page-url");
-		app.navigateToPage(url);
+		app.loadPageFromTitle(parent.attr('data-page-title'));
 	}
 
 	function onDoFullSearch() {
