@@ -53,6 +53,10 @@ header
 	display:none;
 }
 
+#searchresults a {
+	color: black;
+}
+
 /*#savedPagesList, #historyList, #resultList, #langList, #about-page-content*/
 .scroller
 {
@@ -180,7 +184,7 @@ header
 	
 }
 
-#search
+button#search
 {
 	position: absolute;
 	top: 8px;
