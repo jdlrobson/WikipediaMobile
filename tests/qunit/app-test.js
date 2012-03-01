@@ -1,3 +1,5 @@
+var tmp;
+
 module('app.js', {
 	setup: function() {
 		preferencesDB.set('disabledImages', false);
@@ -73,3 +75,29 @@ test('loadPageFromTitle (Main Page)', function() {
 	strictEqual( $('#main').text(), 'hello', 'the correct url was determined' );
 });
 
+module('app.js - disabled images', {
+	setup: function() {
+		app.baseURL = '';
+		tmp = preferencesDB.get('disabledImages');
+		preferencesDB.set('disabledImages', 'yes');
+		$('<div id="content" style="display:none"><div id="main"></div></div>').appendTo(document.body);
+	},
+	teardown: function() {
+		preferencesDB.set('disabledImages', tmp);
+		$('#content').remove();
+	}
+});
+
+test('loadPageFromTitle', function() {
+	var expectedUrl = '/w/api.php?action=parse&format=json&page=Success&mobileformat=html';
+	window.network.setCallback(function(options) {
+		if( options.url === expectedUrl && options.data.noimages && options.dataType === 'json' ) {
+			var html = '<div id="content">Success!</div>';
+			options.success({
+				'parse':{'title':'Success','revid':196,'text': html }
+			});
+		}
+	});
+	app.loadPageFromTitle( 'Success' );
+	strictEqual( $('#main h1.firstHeading#firstHeading').text(), 'Success', 'Correct ajax request made as a render occurred' );
+});

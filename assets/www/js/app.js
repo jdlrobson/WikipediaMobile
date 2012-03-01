@@ -32,8 +32,13 @@ window.app = function() {
 		if(!title || title === app.baseURL) {
 			title = 'Main Page';
 		}
+		var query = {};
+		if(preferencesDB.get('disabledImages') === 'yes') {
+			query.noimages = '1';
+		}
 		network.makeRequest({
 			url: app.baseURL + '/w/api.php?action=parse&format=json&page=' + encodeURIComponent(title) + '&mobileformat=html',
+			data: query,
 			dataType: 'json',
 			success: function(json) {
 				chrome.renderFromApi( json, app.baseURL + '/wiki/' + encodeURIComponent(title) );
