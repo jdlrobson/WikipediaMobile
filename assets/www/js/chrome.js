@@ -17,11 +17,11 @@ window.chrome = function() {
 		$('.titlebar .spinner').css({display:'none'});	
 		$('#clearSearch').css({height:30});
 	}
-	
+
 	function isSpinning() {
 		$('#search').hasClass('inProgress');
 	}
-	
+
 	/**
 	 * Import page components from HTML string and display them in #main
 	 *
@@ -54,7 +54,7 @@ window.chrome = function() {
 		});
 
 		languageLinks.parseAvailableLanguages($div);
-		
+
 		chrome.doScrollHack('#content');
 	}
 
@@ -87,7 +87,7 @@ window.chrome = function() {
 		// this has to be set for the window.history API to work properly
 		//PhoneGap.UsePolling = true;
 
-		preferencesDB.initializeDefaults(function() { 
+		preferencesDB.initializeDefaults(function() {
 			app.baseURL = app.baseUrlForLanguage(preferencesDB.get('language'));
 			/* Split language string about '-' */
 			var lan_arr = (preferencesDB.get('locale')).split('-');
@@ -98,13 +98,13 @@ window.chrome = function() {
 					$("body").attr('dir','rtl');
 				}
 			}
-			
+
 			// Do localization of the initial interface
 			$(document).bind("mw-messages-ready", function() {
 				$('#mainHeader, #menu').localize();
 			});
 			l10n.initLanguages();
-			
+
 			updateMenuState();
 
 			$(".titlebarIcon").bind('touchstart', function() {
@@ -120,8 +120,8 @@ window.chrome = function() {
 					$("#searchParam").blur();
 				}else{
 					// Needed because .val doesn't seem to update instantly
-					setTimeout(function() { 
-						window.search.performSearch($("#searchParam").val(), true); 
+					setTimeout(function() {
+						window.search.performSearch($("#searchParam").val(), true);
 					}, 5);
 				}
 			});
@@ -136,7 +136,7 @@ window.chrome = function() {
 			chrome.loadFirstPage();
 			doFocusHack();
 		});
-		
+
 	}
 
 	function loadFirstPage() {
@@ -179,7 +179,7 @@ window.chrome = function() {
 		$('#content').show();
 	}
 
-	function hideContent() {  
+	function hideContent() {
 		$('#mainHeader').hide();
 		if(!isTwoColumnView()) {
 			$('#content').hide();
@@ -251,7 +251,7 @@ window.chrome = function() {
 			'.cleanButton',
 			'.titlebarIcon'
 		];
-	  
+
 		for (var key in applicableClasses) {
 			applicableClasses[key] += ':not(.activeEnabled)';
 		}
@@ -262,20 +262,20 @@ window.chrome = function() {
 		}
 
 		function onTouchEnd() {
-			if(!scrollEnd)	{
+			if(!scrollEnd) {
 				$(this).addClass('active');
 				setTimeout(function() {
 					$('.active').removeClass('active');
-				} , 150 ) ;				
+				} , 150 );
 			}
 			$('body').unbind('touchend', onTouchEnd);
 			$('body').unbind('touchmove', onTouchMove);
 		}
-	  
-		function onTouchStart() {   
+
+		function onTouchStart() {
 			$('body').bind('touchend', onTouchEnd);
 			$('body').bind('touchmove', onTouchMove);
-			scrollEnd = false;	
+			scrollEnd = false;
 		}			
 
 		setTimeout(function() {
@@ -298,7 +298,7 @@ window.chrome = function() {
 
 			// Stop the link from opening in the iframe directly...
 			event.preventDefault();
-			
+
 			if (href.substr(0, 1) == '#') {
 				// A local hashlink; simulate?
 				var off = $(href).offset(),
@@ -322,19 +322,24 @@ window.chrome = function() {
 			}
 		});
 	}
-	
+
 	function onPageLoaded() {
+		// TODO: next two lines temporary to deal with legacy mediawiki instances
+		$('.section_heading').removeAttr('onclick');
+		$('.section_heading button').remove();
+		// setup default MobileFrontend behaviour (including toggle)
+		MobileFrontend.init();
 		window.scroll(0,0);
 		appHistory.addCurrentPage();
 		toggleForward();
 		geo.addShowNearbyLinks();
-		chrome.hideSpinner();  
+		chrome.hideSpinner();
 		console.log('currentHistoryIndex '+currentHistoryIndex + ' history length '+pageHistory.length);
 	}
-	
+
 	function doScrollHack(element, leaveInPlace) {
 		// placeholder for iScroll etc where needed
-		
+
 		// Reset scroll unless asked otherwise
 		if (!leaveInPlace) {
 			$(element)[0].scrollTop = 0;

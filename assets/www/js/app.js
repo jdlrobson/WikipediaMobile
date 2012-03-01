@@ -54,7 +54,7 @@ window.app = function() {
 		console.log('hideAndLoad origUrl ' + origUrl);
 		var doRequest = function() {
 			network.makeRequest({
-				url: url, 
+				url: url,
 				success: function(data) {
 						chrome.renderHtml(data, origUrl);
 						chrome.onPageLoaded();
@@ -74,9 +74,9 @@ window.app = function() {
 		};
 		console.log("Apparently we are connected = " + network.isConnected());
 		if(!network.isConnected()) {
-			app.setCaching(true, function() { 
+			app.setCaching(true, function() {
 				console.log("HEYA!");
-				doRequest(); 
+				doRequest();
 				app.setCaching(false);
 			});
 		} else {
@@ -122,24 +122,22 @@ window.app = function() {
 			$('#content img').show();
 		}
 	}
-	
-	
+
 	function setCaching(enabled, success) {
 		// Do nothing by default
 		success();
 	}
-
 
 	function navigateToPage(url, options) {
 		var d = $.Deferred();
 		var options = $.extend({cache: false, updateHistory: true}, options || {});
 		$('#searchParam').val('');
 		chrome.showSpinner();
-		
+
 		if (options.updateHistory) {
 			currentHistoryIndex += 1;
 			pageHistory[currentHistoryIndex] = url;
-		} 
+		}
 		if (options.cache) {
 			d = app.loadCachedPage(url);
 		} else {
