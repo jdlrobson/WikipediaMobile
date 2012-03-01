@@ -290,7 +290,8 @@ window.chrome = function() {
 		$('#main').delegate('a', 'click', function(event) {
 			var target = this,
 				url = target.href,             // expanded from relative links for us
-				href = $(target).attr('href'); // unexpanded, may be relative
+				href = $(target).attr('href'), // unexpanded, may be relative
+				title = $(target).attr('title');
 
 			// Stop the link from opening in the iframe directly...
 			event.preventDefault();
@@ -306,6 +307,8 @@ window.chrome = function() {
 			if (url.match(new RegExp("^https?://([^/]+)\." + PROJECTNAME + "\.org/wiki/"))) {
 				// ...and load it through our intermediate cache layer.
 				app.navigateToPage(url);
+			} else if(url.indexOf('/') === 0 || url.indexOf( app.baseURL ) === 0 && title) {
+				app.loadPageFromTitle(title);
 			} else {
 				// ...and open it in parent context for reals.
 				//
