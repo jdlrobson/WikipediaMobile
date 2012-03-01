@@ -58,3 +58,18 @@ test('loadPageFromTitle', function() {
 	strictEqual( $('#main a').text(), 'link', 'check link was copied across' );
 	strictEqual( $('#content:visible').length, 1, 'the content is visible');
 });
+
+test('loadPageFromTitle (Main Page)', function() {
+	var expectedUrl = '/w/api.php?action=parse&format=json&page=Main%20Page&mobileformat=html';
+	window.network.setCallback(function(options) {
+		if( options.url === expectedUrl && options.dataType === 'json' ) {
+			var html = '<div id="content">hello</div>';
+			options.success({
+				'parse':{'title':'Main Page','revid':196,'text': html }
+			});
+		}
+	});
+	app.loadPageFromTitle();
+	strictEqual( $('#main').text(), 'hello', 'the correct url was determined' );
+});
+

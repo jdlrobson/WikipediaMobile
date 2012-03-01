@@ -62,8 +62,10 @@ window.chrome = function() {
 		$('base').attr('href', url);
 
 		$('#main').html($(data.parse.text).html());
-		$('<h1 id="firstHeading" class="firstHeading">').text(data.parse.title).
-			prependTo('#main');
+		if(data.parse.title !== 'Main Page') {
+			$('<h1 id="firstHeading" class="firstHeading">').text(data.parse.title).
+				prependTo('#main');
+		}
 
 		showContent();
 		doScrollHack('#content');
@@ -138,15 +140,16 @@ window.chrome = function() {
 	}
 
 	function loadFirstPage() {
+		var lastPage = history[history.length-1];
 		chrome.showSpinner();
 
 		// restore browsing to last visited page
 		var historyDB = new Lawnchair({name:"historyDB"}, function() {
 			this.all(function(history){
 				if(history.length==0 || window.history.length > 1) {
-					app.navigateToPage(app.baseURL);
+					app.loadPageFromTitle(null);
 				} else {
-					app.navigateToPage(history[history.length-1].value);
+					app.loadPageFromTitle(lastPage.title);
 				}
 			});
 		});

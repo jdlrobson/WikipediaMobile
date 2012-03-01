@@ -29,6 +29,9 @@ window.app = function() {
 	}
 
 	function loadPageFromTitle(title) {
+		if(!title || title === app.baseURL) {
+			title = 'Main Page';
+		}
 		network.makeRequest({
 			url: app.baseURL + '/w/api.php?action=parse&format=json&page=' + encodeURIComponent(title) + '&mobileformat=html',
 			dataType: 'json',
