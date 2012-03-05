@@ -7,7 +7,8 @@ window.network = function() {
 		// So in the interest of sanity, I'll include Zepto *just for this*
 		currentXhr = Zepto.ajax({
 			url: options.url,
-			data: options.data || {},
+			data: options.data,
+			type: options.type || 'GET',
 			dataType: options.dataType || 'text',
 			success: function(data, xhr) {
 				if(data == '') {
