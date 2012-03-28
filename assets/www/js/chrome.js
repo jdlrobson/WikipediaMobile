@@ -295,9 +295,6 @@ window.chrome = function() {
 
 			if (href.substr(0, 1) == '#') {
 				// A local hashlink; simulate?
-				// FIXME: Replace with Reference reveal
-				var offset = $(href).offset().top;
-				$("#content").scrollTop($("#content").scrollTop() + offset - $("#mainHeader").height());
 				return;
 			}
 
