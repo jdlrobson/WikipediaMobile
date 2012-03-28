@@ -1,5 +1,5 @@
 html {
-	overflow: hidden;
+	overflow-x: hidden;
 }
 
 html.badscroll {
@@ -27,9 +27,7 @@ div {
 }
 
 header {
-	position:absolute;
-	top:0px;
-	left:0px;
+	position: relative;
 	width:100%;
 	height: 52px;
 }
@@ -48,7 +46,6 @@ header {
 #nearby-overlay {
 	background-color:white;
 	width:100%;
-	height:100%;
 	display:none;
 }
 
@@ -58,12 +55,8 @@ header {
 
 /*#savedPagesList, #historyList, #resultList, #langList, #about-page-content*/
 .scroller {
-	position:absolute;
-	top:52px;
+	position: relative;
 	width: 100%;
-	bottom: 52px;
-	overflow-y: auto;
-	-webkit-overflow-scrolling: touch;
 }
 
 .badscroll .scroller {
@@ -432,7 +425,6 @@ body[dir=rtl] #settingsList .item select {
 }
 
 #about-page-overlay {
-	padding-top: 10px;
 	background: white;
 	color: DarkGrey;
 	font-family: "Droid Sans", "Helvetica", sans-serif;
@@ -455,7 +447,7 @@ body[dir=rtl] #settingsList .item select {
 
 /* Web, iOS menu */
 #menu {
-	position: absolute;
+	position: fixed;
 	height: 52px;
 	bottom: 0;
 	left: 0;
@@ -585,7 +577,6 @@ body[dir=rtl] #settingsList .item select {
 		background: -ms-linear-gradient(#5F5F5F 0%, #4F4F4F 100%);
 	}
 	.goodscroll #content {
-		position: absolute;
 		width: auto;
 	}
 	.goodscroll.overlay-open #content {
