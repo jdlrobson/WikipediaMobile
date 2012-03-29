@@ -145,7 +145,16 @@
 			</div>
 			{{/languages}}
 		</script>
-
+    
+    <script type="text/html" id="articles-list-template">
+    {{#geonames}}
+       <div class="listItemContainer" data-page-url="{{url}}" data-page-title="{{title}}">
+         <a class="listItem articleLink">
+           <span class="text">{{title}}</span>
+         </a>
+       </div>
+     {{/geonames}}
+    </script>
 	</div>
 
 	<header id="mainHeader">
@@ -253,7 +262,22 @@
 				<button class="titlebarItem closeButton" title-msg="nearby-close"></button>
 			</div>
 		</header>
-		<div id="map"></div>
+		<div id="map-container">
+      <div id="map"></div>
+      <div class="footbar">
+        <button class="switch-view" id="switch-to-list" title-msg="switch-to-list">
+          <msg key="switch-to-list">Switch to list</msg>
+        </button>
+      </div>
+    </div>
+    <div id="articles-list-container">
+      <div id="articles-list"></div>
+      <div class="footbar">
+        <button class="switch-view" id="switch-to-map" title-msg="switch-to-map">
+          <msg key="switch-to-map">Switch to map</msg>
+        </button>
+      </div>
+    </div>
 	</div>
 
 	<menu id="appMenu" type="context">
