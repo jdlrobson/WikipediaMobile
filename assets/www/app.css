@@ -325,6 +325,28 @@ button#search
 	height: 42px;
 }
 
+.footbar {
+	display: -webkit-box;
+	display: -moz-box;
+	display: box;
+	width: 100%;
+	background: -webkit-gradient(linear, left top, left bottom, from(#5F5F5F), to(#4F4F4F));
+	background: -moz-linear-gradient(#5F5F5F 0%, #4F4F4F 100%);
+	background: -ms-linear-gradient(#5F5F5F 0%, #4F4F4F 100%);
+	padding: 5px;
+  height:35px;
+  position: absolute;
+  bottom: 0px;
+}
+
+.footbar button {
+  background-color: inherit;
+  border: none;
+  color: white;
+  margin-left: 30%;
+  width: 200px;
+}
+
 .titlebar > div:first-child {
 	-webkit-box-flex: 1;
 	-moz-box-flex: 1;

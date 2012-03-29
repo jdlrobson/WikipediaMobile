@@ -128,7 +128,21 @@ window.chrome = function() {
 			});
 
 			$(".closeButton").bind('click', showContent);
+      
+// Nearby view init
+      $( "#articles-list-container" ).hide();
+      $( "#switch-to-map" ).bind('click', function() {
+        resetNearbyView();
+        $( "#map-container").show();
+        $( "#articles-list-container").hide();
+      });
 
+      $( "#switch-to-list" ).bind('click', function() {
+        resetNearbyView();
+        $( "#articles-list-container").show();
+        $( "#map-container" ).hide();
+      });
+// --------------
 			initContentLinkHandlers();
 			chrome.loadFirstPage();
 			doFocusHack();
@@ -183,6 +197,13 @@ window.chrome = function() {
 			$('html').addClass('overlay-open');
 		}
 	}
+
+  function resetNearbyView() {
+    chrome.hideOverlays();
+    chrome.hideContent();
+    $("#nearby-overlay").localize().show();
+    chrome.doFocusHack();
+  }
 
 	function showNoConnectionMessage() {
 		alert(mw.message('error-offline-prompt'));
