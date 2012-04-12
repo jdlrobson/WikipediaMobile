@@ -40,6 +40,7 @@ window.geo = function() {
 		var findAndDisplayNearby = function( lat, lon ) {
 			geoLookup( lat, lon, preferencesDB.get("language"), function( data ) {
 				geoAddMarkers( data );
+        populateArticlesList( data );
 			}, function(err) {
 				console.log(JSON.stringify(err));
 			});
@@ -48,7 +49,6 @@ window.geo = function() {
 		var ping = function() {
 			var pos = geo.map.getCenter();
 			findAndDisplayNearby( pos.lat, pos.lng );
-      populateArticlesList( pos );
 		};
 
 		if ( args.current ) {
@@ -92,24 +92,20 @@ window.geo = function() {
 		} );
 	}
 
-  function populateArticlesList( pos ) {
-    geoLookup( pos.lat, pos.lng, preferencesDB.get("language"), function( data ) {
-      $.each(data.geonames, function(i, item) {
-        item.url = item.wikipediaUrl.replace(/^([a-z0-9-]+)\.wikipedia\.org/, 'https://$1.m.wikipedia.org');
-      });
-      var template = templates.getTemplate('articles-list-template');
-      var html = template.render(data);
-      $("#articles-list").html(html);
-      $(".articleLink").click(function() {
-        var parent = $(this).parents(".listItemContainer");
-        var url = parent.attr("data-page-url");
-        app.navigateToPage(url);
-      });
-    },
-    function(err) {
-      console.log(JSON.stringify(err))
+  function populateArticlesList( data ) {
+    $.each(data.geonames, function(i, item) {
+      item.url = item.wikipediaUrl.replace(/^([a-z0-9-]+)\.wikipedia\.org/, 'https://$1.m.wikipedia.org');
+    });
+    var template = templates.getTemplate('articles-list-template');
+    var html = template.render(data);
+    $("#articles-list").html(html);
+    $(".articleLink").click(function() {
+      var parent = $(this).parents(".listItemContainer");
+      var url = parent.attr("data-page-url");
+      app.navigateToPage(url);
     });
   }
+  
 
 	function geoLookup(latitude, longitude, lang, success, error) {
 		var requestUrl = "http://ws.geonames.net/findNearbyWikipediaJSON?formatted=true&";
