@@ -325,7 +325,7 @@ button#search
 	height: 42px;
 }
 
-.footbar {
+.nearby-view-switch {
 	display: -webkit-box;
 	display: -moz-box;
 	display: box;
@@ -339,7 +339,7 @@ button#search
   bottom: 0px;
 }
 
-.footbar button {
+.nearby-view-switch button {
   background-color: inherit;
   border: none;
   color: white;
