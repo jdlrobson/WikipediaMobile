@@ -34,13 +34,13 @@ window.geo = function() {
 			geo.map.attributionControl.addAttribution("<br />" + mw.message("attribution-osm"));
 
 		}
-
 		// @fixme load last-seen coordinates
 		geo.map.setView(new L.LatLng(args.lat, args.lon), 18);
 
 		var findAndDisplayNearby = function( lat, lon ) {
 			geoLookup( lat, lon, preferencesDB.get("language"), function( data ) {
 				geoAddMarkers( data );
+        populateArticlesList( data );
 			}, function(err) {
 				console.log(JSON.stringify(err));
 			});
@@ -92,6 +92,21 @@ window.geo = function() {
 		} );
 	}
 
+  function populateArticlesList( data ) {
+    $.each(data.geonames, function(i, item) {
+      item.url = item.wikipediaUrl.replace(/^([a-z0-9-]+)\.wikipedia\.org/, 'https://$1.m.wikipedia.org');
+    });
+    var template = templates.getTemplate('articles-list-template');
+    var html = template.render(data);
+    $("#articles-list").html(html);
+    $(".articleLink").click(function() {
+      var parent = $(this).parents(".listItemContainer");
+      var url = parent.attr("data-page-url");
+      app.navigateToPage(url);
+    });
+  }
+  
+
 	function geoLookup(latitude, longitude, lang, success, error) {
 		var requestUrl = "http://ws.geonames.net/findNearbyWikipediaJSON?formatted=true&";
 		requestUrl += "lat=" + latitude + "&";
@@ -127,6 +142,7 @@ window.geo = function() {
 	}
 
 	return {
+    populateArticlesList: populateArticlesList,
 		showNearbyArticles: showNearbyArticles,
 		addShowNearbyLinks: addShowNearbyLinks,
 		map: null
