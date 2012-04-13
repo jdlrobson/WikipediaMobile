@@ -133,32 +133,31 @@ window.chrome = function() {
 			});
 
 			$(".closeButton").bind('click', function() {
-        if( geo.mapView ) {
-          showContent();
-        }
-        else {
-          $( "#switch-to-map" ).click();
-        }
-      });
-      
-  function nearbyViewInit() {
-      geo.mapView = true;
-      $( "#articles-list-container" ).hide();
-      $( "#switch-to-map" ).bind('click', function() {
-        resetNearbyView();
-        $( "#map-container").show();
-        $( "#articles-list-container").hide();
-        geo.mapView = true;
-      });
+				if( geo.mapView ) {
+					showContent();
+				} else {
+					$( "#switch-to-map" ).click();
+				}
+			});
+			function nearbyViewInit() {
+				geo.mapView = true;
+				$( "#articles-list-container" ).hide();
+				$( "#switch-to-map" ).bind('click', function() {
+					resetNearbyView();
+					$( "#map-container").show();
+					$( "#articles-list-container").hide();
+					geo.mapView = true;
+				});
 
-      $( "#switch-to-list" ).bind('click', function() {
-        resetNearbyView();
-        $( "#articles-list-container").show();
-        $( "#map-container" ).hide();
-        geo.mapView = false;
-      });
-   }
-      nearbyViewInit();
+				$( "#switch-to-list" ).bind('click', function() {
+					resetNearbyView();
+					$( "#articles-list-container").show();
+					$( "#map-container" ).hide();
+					geo.mapView = false;
+				});
+			}
+
+			nearbyViewInit();
 			initContentLinkHandlers();
 			chrome.loadFirstPage();
 			doFocusHack();
@@ -214,12 +213,12 @@ window.chrome = function() {
 		}
 	}
 
-  function resetNearbyView() {
-    chrome.hideOverlays();
-    chrome.hideContent();
-    $("#nearby-overlay").localize().show();
-    chrome.doFocusHack();
-  }
+	function resetNearbyView() {
+		chrome.hideOverlays();
+		chrome.hideContent();
+		$("#nearby-overlay").localize().show();
+		chrome.doFocusHack();
+	}
 
 	function showNoConnectionMessage() {
 		alert(mw.message('error-offline-prompt'));

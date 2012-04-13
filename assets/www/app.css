@@ -334,17 +334,17 @@ button#search
 	background: -moz-linear-gradient(#5F5F5F 0%, #4F4F4F 100%);
 	background: -ms-linear-gradient(#5F5F5F 0%, #4F4F4F 100%);
 	padding: 5px;
-  height:35px;
-  position: absolute;
-  bottom: 0px;
+	height:35px;
+	position: absolute;
+	bottom: 0px;
 }
 
 .nearby-view-switch button {
-  background-color: inherit;
-  border: none;
-  color: white;
-  margin-left: 30%;
-  width: 200px;
+	background-color: inherit;
+	border: none;
+	color: white;
+	margin-left: 30%;
+	width: 200px;
 }
 
 .titlebar > div:first-child {

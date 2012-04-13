@@ -145,16 +145,16 @@
 			</div>
 			{{/languages}}
 		</script>
-    
-    <script type="text/html" id="articles-list-template">
-    {{#geonames}}
-       <div class="listItemContainer" data-page-url="{{url}}" data-page-title="{{title}}">
-         <a class="listItem articleLink">
-           <span class="text">{{title}}</span>
-         </a>
-       </div>
-     {{/geonames}}
-    </script>
+
+		<script type="text/html" id="articles-list-template">
+			{{#geonames}}
+			<div class="listItemContainer" data-page-url="{{url}}" data-page-title="{{title}}">
+				<a class="listItem articleLink">
+					<span class="text">{{title}}</span>
+				</a>
+			</div>
+			{{/geonames}}
+		</script>
 	</div>
 
 	<header id="mainHeader">
@@ -263,21 +263,21 @@
 			</div>
 		</header>
 		<div id="map-container">
-      <div id="map"></div>
-      <div class="nearby-view-switch">
-        <button class="switch-view" id="switch-to-list" title-msg="switch-to-list">
-          <msg key="switch-to-list">Switch to list</msg>
-        </button>
-      </div>
-    </div>
-    <div id="articles-list-container">
-      <div id="articles-list"></div>
-      <div class="nearby-view-switch">
-        <button class="switch-view" id="switch-to-map" title-msg="switch-to-map">
-          <msg key="switch-to-map">Switch to map</msg>
-        </button>
-      </div>
-    </div>
+			<div id="map"></div>
+			<div class="nearby-view-switch">
+				<button class="switch-view" id="switch-to-list" title-msg="switch-to-list">
+					<msg key="switch-to-list">Switch to list</msg>
+				</button>
+			</div>
+		</div>
+		<div id="articles-list-container">
+			<div id="articles-list"></div>
+			<div class="nearby-view-switch">
+				<button class="switch-view" id="switch-to-map" title-msg="switch-to-map">
+					<msg key="switch-to-map">Switch to map</msg>
+				</button>
+			</div>
+		</div>
 	</div>
 
 	<menu id="appMenu" type="context">
