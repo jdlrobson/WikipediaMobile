@@ -337,6 +337,7 @@ button#search
 	height:35px;
 	position: absolute;
 	bottom: 0px;
+	z-index: 2; /* make it appear above default bottom menu on ios */
 }
 
 .nearby-view-switch button {
