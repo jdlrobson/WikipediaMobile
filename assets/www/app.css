@@ -343,8 +343,9 @@ button#search
 	background-color: inherit;
 	border: none;
 	color: white;
-	margin-left: 30%;
-	width: 200px;
+	width: 100%;
+	text-align: center;
+	display: block;
 }
 
 .titlebar > div:first-child {
