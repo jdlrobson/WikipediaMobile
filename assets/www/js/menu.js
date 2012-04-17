@@ -96,6 +96,7 @@ var menu_items = [
 ];
 
 function updateMenuState() {
+	$('body').removeClass('nativeMenu');
 	$('#menu').remove();
 	var $menu = $('<div>');
 	$menu
