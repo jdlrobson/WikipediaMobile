@@ -79,9 +79,10 @@ header {
 	width: 100%;
 }
 
+.android #map,
 .android .scroller {
 	/* No bottom toolbar */
-	bottom: 0px;
+	bottom: 0;
 }
 
 #map {
@@ -90,10 +91,6 @@ header {
 	bottom: 0px;
 	left: 0px;
 	right: 0px;
-}
-
-.android #map {
-	bottom: 0px; /* no toolbar */
 }
 
 #content {
