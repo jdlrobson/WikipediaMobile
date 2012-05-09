@@ -4,6 +4,8 @@ var pageHistory = [];
 
 window.PROTOCOL = 'https';
 window.PROJECTNAME = 'wikipedia';
+window.LICENSEPAGE = "Wikipedia:Text_of_Creative_Commons_Attribution-ShareAlike_3.0_Unported_License";
+
 (function() {
 	var url_parts = location.href.split('/');
 	delete url_parts[url_parts.length - 1];
@@ -22,10 +24,6 @@ window.CREDITS = [
 function init() {
 	$(document.body).addClass('jsEnabled');
 	document.addEventListener("deviceready", function() {chrome.initialize(); }, true);
-}
-
-function homePage() {
-	app.navigateToPage(app.baseURL);
 }
 
 function aboutPage() {
@@ -49,8 +47,6 @@ function aboutPage() {
 			$("#about-page-overlay").hide();
 			appSettings.showSettings();
 		});
-		chrome.doFocusHack();
 		chrome.setupScrolling('#about-page-overlay .scroller');
-		chrome.scrollTo('#about-page-overlay .scroller', 0);
 	});
 }
