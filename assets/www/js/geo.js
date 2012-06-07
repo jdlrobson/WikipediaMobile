@@ -3,7 +3,7 @@ window.geo = function() {
 	var shownURLs = [], map;
 
 	function showNearbyArticles( args ) {
-		var args = $.extend(
+		args = $.extend(
 			{
 				lat: 0,
 				lon: 0,
