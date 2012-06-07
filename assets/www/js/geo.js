@@ -1,6 +1,7 @@
 window.geo = function() {
 
-	var shownURLs = [], map;
+	var shownURLs = [], map,
+		setting = MobileFrontend.setting;
 
 	function showNearbyArticles( args ) {
 		args = $.extend(
@@ -16,9 +17,8 @@ window.geo = function() {
 			// Disable webkit 3d CSS transformations for tile positioning
 			// Causes lots of flicker in PhoneGap for some reason...
 			L.Browser.webkit3d = false;
-			map = new L.Map('map');
-			//var tiles = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-			var tiles = new L.TileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png', {
+			map = new L.Map( setting( 'mapId' ) );
+			var tiles = new L.TileLayer( setting( 'url-maptiles' ), {
 				maxZoom: 18,
 				subdomains: '1234' // for MapQuest tiles
 			});
@@ -33,7 +33,7 @@ window.geo = function() {
 		map.setView(new L.LatLng(args.lat, args.lon), 18);
 
 		var findAndDisplayNearby = function( lat, lon ) {
-			geoLookup( lat, lon, preferencesDB.get("language"), function( data ) {
+			geoLookup( lat, lon, setting( 'language' ), function( data ) {
 				geoAddMarkers( data );
 			}, function(err) {
 				console.log(JSON.stringify(err));
@@ -87,11 +87,11 @@ window.geo = function() {
 	}
 
 	function geoLookup(latitude, longitude, lang, success, error) {
-		var requestUrl = "http://ws.geonames.net/findNearbyWikipediaJSON?formatted=true&";
-		requestUrl += "lat=" + latitude + "&";
-		requestUrl += "lng=" + longitude + "&";
-		requestUrl += "username=wikimedia&";
-		requestUrl += "lang=" + lang;
+		var requestUrl = MobileFrontend.setting( 'url-geosearch' ),
+			username = 'wikimedia';
+		requestUrl = requestUrl.replace( '$1', latitude ).
+			replace( '$2', longitude ).replace( '$3', username ).replace( '$4', lang );
+
 		$.ajax({
 			url: requestUrl,
 			success: function(data) {
