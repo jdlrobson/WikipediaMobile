@@ -12,10 +12,6 @@ window.geo = function() {
 			args
 		);
 
-		chrome.hideOverlays();
-		chrome.hideContent();
-		$("#nearby-overlay").localize().show();
-
 		if (!geo.map) {
 			// Disable webkit 3d CSS transformations for tile positioning
 			// Causes lots of flicker in PhoneGap for some reason...
@@ -31,13 +27,6 @@ window.geo = function() {
 			geo.map.attributionControl.setPrefix("");
 			geo.map.attributionControl.addAttribution('<span class="map-attribution">' + mw.message("attribution-mapquest") + '</span>');
 			geo.map.attributionControl.addAttribution("<br /><span class='map-attribution'>" + mw.message("attribution-osm") + '</span>');
-
-			$(".map-attribution a").bind('click', function(event) {
-				// Force web links to open in external browser
-				// instead of the app, where navigation will be broken.
-				chrome.openExternalLink(this.href);
-				event.preventDefault();
-			});
 		}
 
 		// @fixme load last-seen coordinates

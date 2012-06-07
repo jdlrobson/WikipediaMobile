@@ -22,6 +22,19 @@ window.chrome = function() {
 		$('#search').hasClass('inProgress');
 	}
 
+	function showMap() {
+		chrome.hideOverlays();
+		chrome.hideContent();
+		$('#nearby-overlay').localize().show();
+		geo.showNearbyArticles();
+		$(".map-attribution a").bind('click', function(event) {
+			// Force web links to open in external browser
+			// instead of the app, where navigation will be broken.
+			chrome.openExternalLink(this.href);
+			event.preventDefault();
+		});
+	}
+
 	function renderHtml(page) {
 
 		$('base').attr('href', page.getCanonicalUrl());
@@ -301,6 +314,7 @@ window.chrome = function() {
 		hideOverlays: hideOverlays,
 		showContent: showContent,
 		hideContent: hideContent,
+		showMap: showMap,
 		addPlatformInitializer: addPlatformInitializer,
 		popupErrorMessage: popupErrorMessage,
 		setupFastClick: setupFastClick,

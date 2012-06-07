@@ -125,7 +125,7 @@ function showListActions(origin) {
 		mw.msg('menu-cancel')
 	], function(val, index) {
 		if (index == 0) {
-			geo.showNearbyArticles();
+			chrome.showMap();
 		} else if (index == 1) {
 			savedPages.showSavedPages();
 		} else if (index == 2) {

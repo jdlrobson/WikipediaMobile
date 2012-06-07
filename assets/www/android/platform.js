@@ -142,7 +142,9 @@ function updateMenuState() {
 
 	var menu_handlers = {
 		'read-in': function() { languageLinks.showLangLinks(app.curPage); },
-		'near-me': function() { geo.showNearbyArticles(); },
+		'near-me': function() {
+			chrome.showMap();
+		},
 		'view-history': function() { appHistory.showHistory(); } ,
 		'save-page': function() { savedPages.saveCurrentPage() },
 		'view-saved-pages': function() { savedPages.showSavedPages(); },
