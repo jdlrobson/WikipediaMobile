@@ -1,6 +1,6 @@
 window.geo = function() {
 
-	var shownURLs = [];
+	var shownURLs = [], map;
 
 	function showNearbyArticles( args ) {
 		var args = $.extend(
@@ -12,25 +12,25 @@ window.geo = function() {
 			args
 		);
 
-		if (!geo.map) {
+		if (!map) {
 			// Disable webkit 3d CSS transformations for tile positioning
 			// Causes lots of flicker in PhoneGap for some reason...
 			L.Browser.webkit3d = false;
-			geo.map = new L.Map('map');
+			map = new L.Map('map');
 			//var tiles = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			var tiles = new L.TileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png', {
 				maxZoom: 18,
 				subdomains: '1234' // for MapQuest tiles
 			});
-			geo.map.addLayer(tiles);
+			map.addLayer(tiles);
 
-			geo.map.attributionControl.setPrefix("");
-			geo.map.attributionControl.addAttribution('<span class="map-attribution">' + mw.message("attribution-mapquest") + '</span>');
-			geo.map.attributionControl.addAttribution("<br /><span class='map-attribution'>" + mw.message("attribution-osm") + '</span>');
+			map.attributionControl.setPrefix("");
+			map.attributionControl.addAttribution('<span class="map-attribution">' + mw.message("attribution-mapquest") + '</span>');
+			map.attributionControl.addAttribution("<br /><span class='map-attribution'>" + mw.message("attribution-osm") + '</span>');
 		}
 
 		// @fixme load last-seen coordinates
-		geo.map.setView(new L.LatLng(args.lat, args.lon), 18);
+		map.setView(new L.LatLng(args.lat, args.lon), 18);
 
 		var findAndDisplayNearby = function( lat, lon ) {
 			geoLookup( lat, lon, preferencesDB.get("language"), function( data ) {
@@ -41,15 +41,15 @@ window.geo = function() {
 		};
 
 		var ping = function() {
-			var pos = geo.map.getCenter();
+			var pos = map.getCenter();
 			findAndDisplayNearby( pos.lat, pos.lng );
 		};
 
 		if ( args.current ) {
-			geo.map.on('viewreset', ping);
-			geo.map.on('locationfound', ping);
-			geo.map.on('moveend', ping);
-			geo.map.locateAndSetView(18, {enableHighAccuracy: true});
+			map.on('viewreset', ping);
+			map.on('locationfound', ping);
+			map.on('moveend', ping);
+			map.locateAndSetView(18, {enableHighAccuracy: true});
 		}
 		else {
 			findAndDisplayNearby( args.lat, args.lon );
@@ -114,7 +114,7 @@ window.geo = function() {
 					app.navigateToPage(url, {hideCurrent: true});
 				})[0];
 				marker.bindPopup(popupContent, {closeButton: false});
-				geo.map.addLayer(marker);
+				map.addLayer(marker);
 				shownURLs.push(url);
 			}
 		});
@@ -122,8 +122,7 @@ window.geo = function() {
 
 	return {
 		showNearbyArticles: showNearbyArticles,
-		addShowNearbyLinks: addShowNearbyLinks,
-		map: null
+		addShowNearbyLinks: addShowNearbyLinks
 	};
 
 }();
