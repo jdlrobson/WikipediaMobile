@@ -81,7 +81,7 @@ window.geo = function() {
 					'lat': getFloatFromDMS( lat ),
 					'lon': getFloatFromDMS( lon ),
 					'current': false,
-				} );				
+				} );
 			} );
 		} );
 	}
