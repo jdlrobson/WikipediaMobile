@@ -27,6 +27,7 @@ window.chrome = function() {
 		chrome.hideContent();
 		$('#nearby-overlay').localize().show();
 		geo.showNearbyArticles( {
+			protocol: window.PROTOCOL,
 			clickPopup: function(ev) {
 				var url = $('a', this).attr('href');
 				app.navigateToPage(url, {hideCurrent: true});

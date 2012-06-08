@@ -2,7 +2,7 @@ var currentHistoryIndex = -1;
 
 var pageHistory = [];
 
-window.PROTOCOL = 'https';
+window.PROTOCOL = 'https:';
 window.PROJECTNAME = 'wikipedia';
 window.LICENSEPAGE = "Wikipedia:Text_of_Creative_Commons_Attribution-ShareAlike_3.0_Unported_License";
 

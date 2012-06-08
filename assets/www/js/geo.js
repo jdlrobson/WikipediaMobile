@@ -105,7 +105,9 @@ window.geo = function() {
 		$.each(data.geonames, function(i, item) {
 			var summary, html,
 				popupContent, popupHeading,
-				url = item.wikipediaUrl.replace(/^([a-z0-9-]+)\.wikipedia\.org/, window.PROTOCOL + '://$1.m.wikipedia.org');
+				//TODO: This should not be wikipedia specific
+				protocol = args.protocol || window.location.protocol,
+				url = item.wikipediaUrl.replace(/^([a-z0-9-]+)\.wikipedia\.org/, protocol + '//$1.m.wikipedia.org');
 			if($.inArray(url, shownURLs) === -1) {
 				var marker = new L.Marker(new L.LatLng(item.lat, item.lng));
 				summary = item.summary || '';
