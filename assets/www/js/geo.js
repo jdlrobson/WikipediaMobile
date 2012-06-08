@@ -34,7 +34,7 @@ window.geo = function() {
 
 		var findAndDisplayNearby = function( lat, lon ) {
 			geoLookup( lat, lon, setting( 'language' ), function( data ) {
-				geoAddMarkers( data );
+				geoAddMarkers( data, args );
 			}, function(err) {
 				console.log(JSON.stringify(err));
 			});
@@ -101,18 +101,25 @@ window.geo = function() {
 		});
 	}
 
-	function geoAddMarkers( data ) {
+	function geoAddMarkers( data, args ) {
 		$.each(data.geonames, function(i, item) {
 			var summary, html,
+				popupContent, popupHeading,
 				url = item.wikipediaUrl.replace(/^([a-z0-9-]+)\.wikipedia\.org/, window.PROTOCOL + '://$1.m.wikipedia.org');
 			if($.inArray(url, shownURLs) === -1) {
 				var marker = new L.Marker(new L.LatLng(item.lat, item.lng));
 				summary = item.summary || '';
 
-				html = "<div><strong>" + item.title + "</strong><p>" + summary + "</p></div>";
-				var popupContent = $(html).click(function() {
-					app.navigateToPage(url, {hideCurrent: true});
-				})[0];
+				popupContent = $( '<div />' )[ 0 ];
+				popupHeading = $( '<a />' ).text( item.title ).attr( 'href', url ).
+					prependTo( popupContent )[ 0 ];
+				$( '<p>' ).text( summary ).appendTo( popupContent );
+				if( args.clickPopup ) {
+					$( popupContent ).click( args.clickPopup );
+					$( popupHeading ).click( function( ev ) {
+						ev.preventDefault();
+					} );
+				}
 				marker.bindPopup(popupContent, {closeButton: false});
 				map.addLayer(marker);
 				shownURLs.push(url);

@@ -26,7 +26,12 @@ window.chrome = function() {
 		chrome.hideOverlays();
 		chrome.hideContent();
 		$('#nearby-overlay').localize().show();
-		geo.showNearbyArticles();
+		geo.showNearbyArticles( {
+			clickPopup: function(ev) {
+				var url = $('a', this).attr('href');
+				app.navigateToPage(url, {hideCurrent: true});
+			}
+		});
 		$(".map-attribution a").bind('click', function(event) {
 			// Force web links to open in external browser
 			// instead of the app, where navigation will be broken.
